@@ -149,6 +149,7 @@ String.prototype.capitalize = function() {
 };
 
 // Pulls adjective out of array using random number sent from generator
+//Return an array of ajd for corresponding case
 function getAdj(x){
   switch(x) {
     case "dark":
@@ -213,6 +214,7 @@ function getAdj(x){
 }
 
 // Pulls noun out of array using random number sent from generator
+// Returns noun for specific case
 function getNoun(y) {
   switch(y) {
     case "animals":
@@ -281,7 +283,7 @@ function getNoun(y) {
       return scifi_default;
   }
 }
-
+//two arrays for adj and noun, used to choose the case for detailed requirement
 var adjectives = ["dark", "color", "whimsical", "shiny", "noise", "apocalyptic", "insulting", "praise", "scientific"];  // types of adjectives for pizza titles
 var nouns = ["animals", "everyday", "fantasy", "gross", "horror", "jewelry", "places", "scifi"];                        // types of nouns for pizza titles
 
@@ -375,7 +377,7 @@ var pizzaElementGenerator = function(i) {
   pizzaContainer.classList.add("randomPizzaContainer");
   pizzaContainer.style.width = "33.33%";
   pizzaContainer.style.height = "325px";
-  pizzaContainer.id = "pizza" + i;                // gives each pizza element a unique id
+  pizzaContainer.id = "pizza" + i;                // gives each pizza element a unique id, interesting
   pizzaImageContainer.classList.add("col-md-6");
 
   pizzaImage.src = "images/pizza.png";
@@ -450,10 +452,12 @@ var resizePizzas = function(size) {
 
   // Iterates through pizza elements on the page and changes their widths
   function changePizzaSizes(size) {
-    for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
-      var dx = determineDx(document.querySelectorAll(".randomPizzaContainer")[i], size);
-      var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
-      document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
+    var allPizza = document.querySelectorAll(".randomPizzaContainer");
+    var dx = determineDx(allPizza[0], size);
+    var offset = allPizza[0].offsetWidth;
+    for (var i = 0; i < allPizza.length; i++) {
+      //var newwidth = (offset + dx) + 'px'; //px is needed cus it's in the DOM scripting
+      allPizza[i].style.width = (offset + dx) + 'px';
     }
   }
 
@@ -491,7 +495,7 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
   for (var i = numberOfEntries - 1; i > numberOfEntries - 11; i--) {
     sum = sum + times[i].duration;
   }
-  console.log("Average time to generate last 10 frames: " + sum / 10 + "ms");
+  console.log("Average fps to generate last 10 frames: " + 1000/(sum / 10) + "fps");
 }
 
 // The following code for sliding background pizzas was pulled from Ilya's demo found at:
@@ -501,10 +505,10 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
 function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
-
+  var scrollTop = document.body.scrollTop;
   var items = document.querySelectorAll('.mover');
   for (var i = 0; i < items.length; i++) {
-    var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
+    var phase = Math.sin((scrollTop / 1250) + (i % 5));
     items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
 
