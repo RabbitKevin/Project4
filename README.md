@@ -1,5 +1,5 @@
-<h1>Website Performance Optimization</h1>  
-<h2>Following techniques used:</h2>  
+#Website Performance Optimization  
+##Following techniques used:  
 <ul>
     <li>Images are compressed</li>
     <li>Add async tag to js source to avoid render blocking</li>
